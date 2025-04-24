@@ -1,5 +1,6 @@
 CREATE DATABASE BDArchivos
 GO
+USE BDArchivos;
 
 CREATE TABLE TiposUsuario (
 	IDTipoUsuario INT PRIMARY KEY IDENTITY(1, 1),
