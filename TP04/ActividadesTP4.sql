@@ -44,7 +44,7 @@ WHERE U.Nombre = 'Michael' AND U.Apellido = 'Williams';
 -- Listar nombres de archivos, extensión, tamaño en bytes, fecha de creación y de 
 -- modificación, apellido y nombre del usuario dueño de aquellos archivos cuya
 -- descripción contengan el término 'empresa' o 'presupuesto'.
-SELECT A.Nombre + ', ' + A.Extension AS 'Archivo', A.Tamaño, A.FechaCreacion, A.FechaUltimaModificacion,
+SELECT A.Nombre + '.' + A.Extension AS 'Archivo', A.Tamaño, A.FechaCreacion, A.FechaUltimaModificacion,
 U.Apellido + ', ' + U.Nombre AS 'Apellido y Nombre'
 FROM Archivos AS A
 INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
@@ -53,8 +53,28 @@ WHERE A.Descripcion LIKE '%empresa%' OR A.Descripcion LIKE '%presupuesto%';
 -- Ejercicio 8:
 -- Listar las extensiones sin repetir de los archivos cuyos usuarios dueños tengan tipo
 -- de usuario 'Suscripción Plus', 'Suscripción Premium' o 'Suscripción Empresarial'
-SELECT DISTINCT A.Extension FROM Archivos AS A
+SELECT DISTINCT A.Extension
+FROM Archivos AS A
 INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
 INNER JOIN TiposUsuario AS TU ON U.IDTipoUsuario = TU.IDTipoUsuario
 WHERE TU.TipoUsuario IN('Suscripción Plus', 'Suscripción Premium', 'Suscripción Empresarial');
 
+-- Ejercicio 9:
+-- Listar los apellidos y nombres de los usuarios dueños y el tamaño del archivo de los
+-- tres archivos con extensión 'zip' más pesados. Puede ocurrir que el mismo usuario
+-- aparezca varias veces en el listado.
+SELECT TOP(3) U.Apellido + ', ' + U.Nombre AS 'Apellido y Nombre', A.Tamaño
+FROM Archivos AS A
+INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
+WHERE A.Extension = 'zip'
+ORDER BY A.Tamaño DESC;
+
+-- Ejercicio 10:
+-- Por cada archivo listar el nombre del archivo, la extensión, el tamaño en bytes, el
+-- nombre del tipo de archivo y el tamaño calculado en su mayor expresión y la unidad
+-- calculada. Siendo Gigabytes si al menos pesa un gigabyte, Megabytes si al menos pesa
+-- un megabyte, Kilobyte si al menos pesa un kilobyte o en su defecto expresado en bytes.
+-- Por ejemplo, si el archivo imagen.jpg pesa 40960 bytes entonces debe figurar 40 en
+-- la columna Tamaño Calculado y 'Kilobytes' en la columna unidad.
+SELECT A.Nombre + '.' + A.Extension AS 'Archivo', A.Tamaño, TA.TipoArchivo FROM Archivos AS A
+INNER JOIN TiposArchivos AS TA ON A.IDTipoArchivo = TA.IDTipoArchivo
