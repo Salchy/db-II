@@ -97,3 +97,7 @@ FROM Archivos AS A
 INNER JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
 INNER JOIN Usuarios AS U ON AC.IDUsuario = U.IDUsuario
 WHERE U.Apellido IN('Clarck', 'Jones');
+
+-- Ejercicio 13:
+-- Listar los nombres de archivo, extensión, apellidos y nombres de los usuarios a quienes
+-- se le hayan compartido archivos con permiso de 'Escritura'
