@@ -49,3 +49,12 @@ U.Apellido + ', ' + U.Nombre AS 'Apellido y Nombre'
 FROM Archivos AS A
 INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
 WHERE A.Descripcion LIKE '%empresa%' OR A.Descripcion LIKE '%presupuesto%';
+
+-- Ejercicio 8:
+-- Listar las extensiones sin repetir de los archivos cuyos usuarios dueños tengan tipo
+-- de usuario 'Suscripción Plus', 'Suscripción Premium' o 'Suscripción Empresarial'
+SELECT DISTINCT A.Extension FROM Archivos AS A
+INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
+INNER JOIN TiposUsuario AS TU ON U.IDTipoUsuario = TU.IDTipoUsuario
+WHERE TU.TipoUsuario IN('Suscripción Plus', 'Suscripción Premium', 'Suscripción Empresarial');
+
