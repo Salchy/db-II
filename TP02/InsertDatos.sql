@@ -1,4 +1,4 @@
-Use BDArchivos
+Use DBArchivos
 GO
 
 -- Inserts a tabla TiposUsuario
@@ -19,6 +19,7 @@ INSERT INTO Permisos (Nombre) VALUES ('Administrador');
 
 -- Compruebo que la inserción sea correcta
 SELECT * FROM Permisos;
+GO
 
 -- Insert a tabla TipoUsuario
 -- Obtengo los ID de cada tipo de usuario para asignar acorde al ejercicio:
@@ -38,6 +39,7 @@ INSERT INTO Usuarios (Nombre, Apellido, IDTipoUsuario) VALUES ('David', 'Jones',
 
 -- Compruebo que la inserción sea correcta
 SELECT * FROM Usuarios;
+GO
 
 -- Insert a tabla TiposArchivos
 INSERT INTO TiposArchivos (TipoArchivo) VALUES ('Documento PDF');
@@ -63,7 +65,7 @@ INSERT INTO TiposArchivos (TipoArchivo) VALUES ('Archivo TAR');
 
 -- Compruebo que la inserción sea correcta
 SELECT * FROM TiposArchivos;
-
+GO
 -- INSERT a tabla Archivos:
 -- Obtengo los ID de los usuarios para asignar acorde al ejercicio.
 SELECT * FROM Usuarios;
@@ -99,6 +101,7 @@ INSERT INTO Archivos (IDUsuarioDueño, Nombre, Extension, Descripcion, IDTipoArch
 
 -- Compruebo que la inserción sea correcta
 SELECT * FROM Archivos;
+GO
 
 INSERT INTO Archivos (IDUsuarioDueño, Nombre, Extension, Descripcion, IDTipoArchivo, Tamaño, FechaCreacion, FechaUltimaModificacion, Eliminado) VALUES (7, 'Análisis Competencia', 'docx', 'Análisis del mercado y competencia', 6, 61440, '2022-03-18', '2022-03-19', 0);
 INSERT INTO Archivos (IDUsuarioDueño, Nombre, Extension, Descripcion, IDTipoArchivo, Tamaño, FechaCreacion, FechaUltimaModificacion, Eliminado) VALUES (8, 'Memorándum Interno', 'docx', 'Memorándum para todo el personal', 6, 30720, '2023-11-10', '2023-11-10', 0);
@@ -122,6 +125,7 @@ INSERT INTO Archivos (IDUsuarioDueño, Nombre, Extension, Descripcion, IDTipoArch
 
 -- Compruebo que la inserción sea correcta
 SELECT * FROM Archivos;
+GO
 
 -- Insert de ArchivosCompartidos:
 
@@ -155,3 +159,4 @@ INSERT INTO ArchivosCompartidos (IDArchivo, IDUsuario, IDPermiso, FechaCompartid
 
 -- Compruebo que la inserción sea correcta
 SELECT * FROM ArchivosCompartidos;
+GO
