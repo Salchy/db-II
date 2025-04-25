@@ -14,7 +14,8 @@ INNER JOIN TiposArchivos AS TA ON A.IDTipoArchivo = TA.IDTipoArchivo;
 -- Listar los nombres de archivos junto a la extensión con el siguiente formato
 -- 'NombreArchivo.extension'. Por ejemplo, 'Actividad.pdf'. Sólo listar aquellos cuyo
 -- tipo de archivo contenga los términos 'ZIP', 'Word', 'Excel', 'Javascript' o 'GIF'
-SELECT A.Nombre + '.' + A.Extension AS 'Archivo' FROM Archivos AS A
+SELECT A.Nombre + '.' + A.Extension AS 'Archivo'
+FROM Archivos AS A
 	INNER JOIN TiposArchivos AS TA ON A.IDTipoArchivo = TA.IDTipoArchivo
 WHERE TA.TipoArchivo LIKE '%ZIP%' 
 	OR TA.TipoArchivo LIKE '%Word%'
@@ -76,5 +77,23 @@ ORDER BY A.Tamaño DESC;
 -- un megabyte, Kilobyte si al menos pesa un kilobyte o en su defecto expresado en bytes.
 -- Por ejemplo, si el archivo imagen.jpg pesa 40960 bytes entonces debe figurar 40 en
 -- la columna Tamaño Calculado y 'Kilobytes' en la columna unidad.
-SELECT A.Nombre + '.' + A.Extension AS 'Archivo', A.Tamaño, TA.TipoArchivo FROM Archivos AS A
+SELECT A.Nombre + '.' + A.Extension AS 'Archivo', A.Tamaño, TA.TipoArchivo
+FROM Archivos AS A
 INNER JOIN TiposArchivos AS TA ON A.IDTipoArchivo = TA.IDTipoArchivo
+-- No entiendo como hacer la consigna 'tamaño calculado en su mayor expresión y la unidad
+-- calculada'
+
+-- Ejercicio 11
+-- Listar los nombres de archivo y extensión de los archivos que han sido compartidos.
+SELECT DISTINCT A.Nombre + '.' + A.Extension AS 'Archivo'
+FROM Archivos AS A
+INNER JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo;
+
+-- Ejercicio 12:
+-- Listar los nombres de archivo y extensión de los archivos que han sido compartidos a
+-- usuarios con apellido 'Clarck' o 'Jones'
+SELECT DISTINCT A.Nombre + '.' + A.Extension AS 'Archivo'
+FROM Archivos AS A
+INNER JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
+INNER JOIN Usuarios AS U ON AC.IDUsuario = U.IDUsuario
+WHERE U.Apellido IN('Clarck', 'Jones');
