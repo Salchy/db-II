@@ -73,3 +73,18 @@ WHERE
 	OR
 	(Eliminado = 0 AND YEAR(FechaUltimaModificacion) > 2021)
 ORDER BY IDArchivo;
+
+-- Faltan ejercicios 17 al 22:
+17 - Listar los Archivos creados en el año 2023 indicando todas las columnas y además una llamada “DiaSemana” que devuelva a qué día de la semana (1-7) corresponde la fecha de creación del archivo. Ordenar los registros por la columna que contiene el día de la semana.
+DESAFÍO: crear otra columna llamada DiaSemanaEnLetras que contenga el día de la semana, pero en letras (suponiendo que la semana comienza en 1-DOMINGO). Por ejemplo, si la fecha del Archivo es 20/08/2023, la columna DiaSemana debe contener 1 y la columna DiaSemanaEnLetras debe contener DOMINGO.
+
+18 - Listar los Archivos que no estén Eliminados y cuyo mes de creación coincida con el mes actual (sin importar el año). NOTA: obtener el mes actual mediante una función, no forzar el valor.
+
+19 - Listar la cantidad total de archivos creados en cada año, mostrando una columna con el año (obtenido a partir de la fecha de creación) y otra con la cantidad de archivos correspondientes a ese año. Además, si se animan, como desafío adicional, agreguen a la consulta una tercera columna llamada PorcentajeSobreElTotal, que indique qué porcentaje representa dicha cantidad sobre el total general de archivos registrados en la base. El porcentaje debe mostrarse con dos decimales y calcularse sin utilizar subconsultas. Ordenar el resultado por año.
+
+20 - Listar los Archivos que no hayan sido creados por los Usuarios con ID 1, 2, ,5, 9 y 10. Indicar IDUsuarioDueño, IDArchivo, fecha de creación y Tamaño. Ordenar por IDUsuarioDueño.
+
+21 - Listar todos los datos de los Usuarios cuyos apellidos comienzan con J. Hacer la misma consulta para los Usuarios con apellido que comienza con J y el Nombre comienza con E. Ordenar los registros por IDUsuario.
+
+22 - Listar todos los datos de los Archivos que tengan el mayor Tamaño. En caso de empate se deben listar todos los Archivos con igual Tamaño.
+
