@@ -109,21 +109,38 @@ WHERE AC.IDPermiso = 3;
 
 -- Ejercicio 14:
 -- Listar los nombres de archivos y extensión de los archivos que no han sido compartidos.
-SELECT A.Nombre + '.' + A.Extension AS 'Archivos sin compartir' FROM Archivos AS A
+SELECT A.Nombre + '.' + A.Extension AS 'Archivos sin compartir'
+FROM Archivos AS A
 LEFT JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
 WHERE AC.IDArchivo IS NULL;
 
 -- Ejercicio 15:
 -- Listar los apellidos y nombres de los usuarios dueños que tienen archivos eliminados.
-
+SELECT DISTINCT U.Nombre, U.Apellido
+FROM Usuarios AS U
+INNER JOIN Archivos AS A ON U.IDUsuario = A.IDUsuarioDueño
+WHERE A.Eliminado = 1;
 
 -- Ejercicio 16:
--- Listar los nombres de los tipos de suscripciones, sin repetir, que tienen archivos que pesan al menos 120 Megabytes.
-
+-- Listar los nombres de los tipos de suscripciones, sin repetir, que tienen archivos que pesan al menos
+-- 120 Megabytes.
+SELECT DISTINCT TU.TipoUsuario
+FROM TiposUsuario AS TU
+INNER JOIN Usuarios AS U ON TU.IDTipoUsuario = U.IDTipoUsuario
+INNER JOIN Archivos AS A ON U.IDUsuario = a.IDUsuarioDueño
+WHERE A.Tamaño / 1024 / 1024 > 120;
 
 -- Ejercicio 17:
--- Listar los apellidos y nombres de los usuarios dueños, nombre del archivo, extensión, fecha de creación, fecha de modificación y la cantidad de días transcurridos desde la última modificación. Sólo incluir a los archivos que se hayan modificado (fecha de modificación distinta a la fecha de creación).
-
+-- Listar los apellidos y nombres de los usuarios dueños, nombre del archivo, extensión, fecha de creación,
+-- fecha de modificación y la cantidad de días transcurridos desde la última modificación. Sólo incluir a
+-- los archivos que se hayan modificado (fecha de modificación distinta a la fecha de creación).
+SELECT U.Apellido + ', ' + U.Nombre AS 'Usuario', A.Nombre + '.' + A.Extension AS 'Fichero',
+CAST(A.FechaCreacion AS DATE) AS 'Fecha de Creacion',
+CAST(A.FechaUltimaModificacion AS DATE) AS 'Fecha De Modificacion',
+DATEDIFF(DAY, A.FechaUltimaModificacion, GETDATE()) AS 'Dias desde Modificacion'
+FROM Usuarios AS U
+INNER JOIN Archivos AS A ON U.IDUsuario = A.IDUsuarioDueño
+WHERE A.FechaCreacion != A.FechaUltimaModificacion;
 
 -- Ejercicio 18:
 -- Listar nombres de archivos, extensión, tamaño, apellido y nombre del usuario dueño del archivo, apellido y nombre del usuario que tiene el archivo compartido y el nombre de permiso otorgado.
