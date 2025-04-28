@@ -101,3 +101,37 @@ WHERE U.Apellido IN('Clarck', 'Jones');
 -- Ejercicio 13:
 -- Listar los nombres de archivo, extensión, apellidos y nombres de los usuarios a quienes
 -- se le hayan compartido archivos con permiso de 'Escritura'
+SELECT A.Nombre + '.' + A.Extension AS 'Fichero', U.Apellido, U.Nombre
+FROM ArchivosCompartidos AS AC
+INNER JOIN Archivos AS A ON AC.IDArchivo = A.IDArchivo
+INNER JOIN Usuarios AS U ON AC.IDUsuario = U.IDUsuario
+WHERE AC.IDPermiso = 3;
+
+-- Ejercicio 14:
+-- Listar los nombres de archivos y extensión de los archivos que no han sido compartidos.
+SELECT A.Nombre + '.' + A.Extension AS 'Archivos sin compartir' FROM Archivos AS A
+LEFT JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
+WHERE AC.IDArchivo IS NULL;
+
+-- Ejercicio 15:
+-- Listar los apellidos y nombres de los usuarios dueños que tienen archivos eliminados.
+
+
+-- Ejercicio 16:
+-- Listar los nombres de los tipos de suscripciones, sin repetir, que tienen archivos que pesan al menos 120 Megabytes.
+
+
+-- Ejercicio 17:
+-- Listar los apellidos y nombres de los usuarios dueños, nombre del archivo, extensión, fecha de creación, fecha de modificación y la cantidad de días transcurridos desde la última modificación. Sólo incluir a los archivos que se hayan modificado (fecha de modificación distinta a la fecha de creación).
+
+
+-- Ejercicio 18:
+-- Listar nombres de archivos, extensión, tamaño, apellido y nombre del usuario dueño del archivo, apellido y nombre del usuario que tiene el archivo compartido y el nombre de permiso otorgado.
+
+
+-- Ejercicio 19:
+-- Listar nombres de archivos, extensión, tamaño, apellido y nombre del usuario dueño del archivo, apellido y nombre del usuario que tiene el archivo compartido y el nombre de permiso otorgado. Sólo listar aquellos registros cuyos tipos de usuarios coincidan tanto para el dueño como para el usuario al que le comparten el archivo.
+
+
+-- Ejercicio 20:
+-- Apellido y nombre de los usuarios que tengan compartido o sean dueños del archivo con nombre 'Documento Legal'.
