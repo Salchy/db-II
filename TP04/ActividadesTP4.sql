@@ -143,12 +143,45 @@ INNER JOIN Archivos AS A ON U.IDUsuario = A.IDUsuarioDueño
 WHERE A.FechaCreacion != A.FechaUltimaModificacion;
 
 -- Ejercicio 18:
--- Listar nombres de archivos, extensión, tamaño, apellido y nombre del usuario dueño del archivo, apellido y nombre del usuario que tiene el archivo compartido y el nombre de permiso otorgado.
-
+-- Listar nombres de archivos, extensión, tamaño, apellido y nombre del usuario dueño del archivo, apellido y
+-- nombre del usuario que tiene el archivo compartido y el nombre de permiso otorgado.
+SELECT 
+	A.Nombre + '.' + A.Extension AS 'Fichero',
+	A.Tamaño,
+	U.Apellido + ', ' + U.Nombre AS 'Dueño',
+	U2.Nombre + ', ' + U2.Apellido AS 'Compartido con',
+	P.Nombre AS 'Permiso'
+FROM Archivos AS A
+INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
+INNER JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
+INNER JOIN Permisos AS P ON AC.IDPermiso = P.IDPermiso
+INNER JOIN Usuarios AS U2 ON AC.IDUsuario = U2.IDUsuario;
 
 -- Ejercicio 19:
--- Listar nombres de archivos, extensión, tamaño, apellido y nombre del usuario dueño del archivo, apellido y nombre del usuario que tiene el archivo compartido y el nombre de permiso otorgado. Sólo listar aquellos registros cuyos tipos de usuarios coincidan tanto para el dueño como para el usuario al que le comparten el archivo.
-
+-- Listar nombres de archivos, extensión, tamaño, apellido y nombre del usuario dueño del archivo, apellido y
+-- nombre del usuario que tiene el archivo compartido y el nombre de permiso otorgado. Sólo listar aquellos
+-- registros cuyos tipos de usuarios coincidan tanto para el dueño como para el usuario al que le comparten el
+-- archivo.
+SELECT 
+	A.Nombre + '.' + A.Extension AS 'Fichero',
+	A.Tamaño,
+	U.Apellido + ', ' + U.Nombre AS 'Dueño',
+	U2.Nombre + ', ' + U2.Apellido AS 'Compartido con',
+	P.Nombre AS 'Permiso'
+FROM Archivos AS A
+INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
+INNER JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
+INNER JOIN Permisos AS P ON AC.IDPermiso = P.IDPermiso
+INNER JOIN Usuarios AS U2 ON AC.IDUsuario = U2.IDUsuario
+WHERE U.IDTipoUsuario = U2.IDTipoUsuario;
 
 -- Ejercicio 20:
 -- Apellido y nombre de los usuarios que tengan compartido o sean dueños del archivo con nombre 'Documento Legal'.
+SELECT 
+	U.Apellido + ', ' + U.Nombre AS 'Dueño',
+	U2.Apellido + ', ' + U2.Nombre AS 'Compartido'
+FROM Archivos AS A
+INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
+LEFT JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
+LEFT JOIN Usuarios AS U2 ON AC.IDUsuario = U2.IDUsuario
+WHERE A.Nombre = 'Documento Legal';
