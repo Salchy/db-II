@@ -32,16 +32,25 @@ INNER JOIN Usuarios AS U ON AC.IDUsuario = U.IDUsuario
 WHERE U.Apellido = 'Clarck'
 
 -- Ejercicio 7 - La cantidad de tipos de usuario que tienen asociado usuarios que registren, como dueños, archivos con extensión pdf.
-
+SELECT COUNT(DISTINCT TU.TipoUsuario)
+FROM Archivos AS A
+INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
+INNER JOIN TiposUsuario AS TU ON U.IDTipoUsuario = TU.IDTipoUsuario
+WHERE A.IDUsuarioDueño = U.IDUsuario AND A.Extension = 'pdf';
 
 -- Ejercicio 8 - El tamaño máximo expresado en Megabytes de los archivos que hayan sido creados en el año 2024.
+SELECT MAX(Tamaño) / 1024.0 / 1024.0 AS 'Tamaño maximo (MB)'
+FROM Archivos
+WHERE YEAR(FechaCreacion) = 2024
 
-
--- Ejercicio 9 - El nombre del tipo de usuario y la cantidad de usuarios distintos de dicho tipo que registran, como dueños, archivos con extensión pdf.
+-- Ejercicio 9 - El nombre del tipo de usuario y la cantidad de usuarios distintos de dicho tipo que registran, como dueños, archivos
+-- con extensión pdf.
+SELECT
+FROM Archivos AS A
 
 
 -- Ejercicio 10 - El nombre y apellido de los usuarios dueños y la suma total del tamaño de los archivos que tengan compartidos con otros usuarios. Mostrar  ordenado de mayor sumatoria de tamaño a menor.
-
+	
 
 -- Ejercicio 11 - El nombre del tipo de archivo y el promedio de tamaño de los archivos que corresponden a dicho tipo de archivo.
 
