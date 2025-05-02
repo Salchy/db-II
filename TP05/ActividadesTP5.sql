@@ -88,10 +88,20 @@ ORDER BY COUNT(*) ASC;
 
 -- Ejercicio 13 - Por cada usuario, indicar IDUSuario, Apellido, Nombre y la sumatoria total en bytes de los
 -- archivos que es dueño. Si algún usuario no registra archivos indicar 0 en la sumatoria total.
-
+SELECT U.IDUsuario, U.Apellido, U.Nombre, ISNULL(SUM(A.Tamaño), 0) AS 'Acumulado (bytes)'
+FROM Usuarios AS U
+LEFT JOIN Archivos AS A ON A.IDUsuarioDueño = U.IDUsuario
+GROUP BY U.IDUsuario, U.Apellido, U.Nombre;
 
 -- Ejercicio 14 - Los tipos de archivos que fueron compartidos más de una vez con el permiso con nombre 'Lectura'
-
+SELECT TA.TipoArchivo, COUNT(*) AS 'Cant Permisos Lectura'
+FROM Archivos AS A
+INNER JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
+INNER JOIN TiposArchivos AS TA ON A.IDTipoArchivo = TA.IDTipoArchivo
+INNER JOIN Permisos AS P ON AC.IDPermiso = P.IDPermiso
+WHERE P.Nombre = 'Lectura'
+GROUP BY TA.TipoArchivo
+HAVING COUNT(*) > 1;
 
 -- Ejercicio 15 - Escribí una consulta que requiera una función de resumen, el uso de joins y de having. Pega en el Foro de Actividad 2.3 en el hilo "Queries del Ejercicio 15" el enunciado de la consulta y la tabla en formato texto plano de lo que daría como resultado con los datos que trabajamos en conjunto.
 
