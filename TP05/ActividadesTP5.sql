@@ -103,13 +103,29 @@ WHERE P.Nombre = 'Lectura'
 GROUP BY TA.TipoArchivo
 HAVING COUNT(*) > 1;
 
--- Ejercicio 15 - Escribí una consulta que requiera una función de resumen, el uso de joins y de having. Pega en el Foro de Actividad 2.3 en el hilo "Queries del Ejercicio 15" el enunciado de la consulta y la tabla en formato texto plano de lo que daría como resultado con los datos que trabajamos en conjunto.
+-- Ejercicio 15 - Escribí una consulta que requiera una función de resumen, el uso de joins y de having.
+-- Pega en el Foro de Actividad 2.3 en el hilo "Queries del Ejercicio 15" el enunciado de la consulta y la tabla en
+-- formato texto plano de lo que daría como resultado con los datos que trabajamos en conjunto.
 
+-- Listar los usuarios que tengan compartido más de 1 archivo con permisos de Lectura
+SELECT U.Nombre, U.Apellido, COUNT(*)
+FROM Archivos AS A
+INNER JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
+INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
+INNER JOIN Permisos AS P ON AC.IDPermiso = P.IDPermiso
+WHERE P.Nombre = 'Lectura'
+GROUP BY U.IDUsuario, U.Nombre, U.Apellido
+HAVING COUNT(DISTINCT A.IDArchivo) > 1;
 
--- Ejercicio 16 - Por cada tipo de archivo indicar el tipo de archivo y el tamaño del archivo de dicho tipo que sea más pesado.
+-- Ejercicio 16 - Por cada tipo de archivo indicar el tipo de archivo y el tamaño del archivo de dicho tipo que sea
+-- más pesado.
+SELECT TA.TipoArchivo, ROUND(MAX(A.Tamaño) / 1024.0 / 1024.0, 4) AS 'Archivo más pesado (MB)'
+FROM Archivos AS A
+INNER JOIN TiposArchivos AS TA ON A.IDTipoArchivo = TA.IDTipoArchivo
+GROUP BY TA.TipoArchivo;
 
-
--- Ejercicio 17 - El nombre del tipo de archivo y el promedio de tamaño de los archivos que corresponden a dicho tipo de archivo. Solamente listar aquellos registros que superen los 50 Megabytes de promedio.
+-- Ejercicio 17 - El nombre del tipo de archivo y el promedio de tamaño de los archivos que corresponden a dicho
+-- tipo de archivo. Solamente listar aquellos registros que superen los 50 Megabytes de promedio.
 
 
 -- Ejercicio 18 - Listar las extensiones que registren más de 2 archivos que no hayan sido compartidos.
