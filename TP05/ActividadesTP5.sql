@@ -43,16 +43,29 @@ SELECT MAX(Tamaño) / 1024.0 / 1024.0 AS 'Tamaño maximo (MB)'
 FROM Archivos
 WHERE YEAR(FechaCreacion) = 2024
 
--- Ejercicio 9 - El nombre del tipo de usuario y la cantidad de usuarios distintos de dicho tipo que registran, como dueños, archivos
--- con extensión pdf.
-SELECT
+-- Ejercicio 9 - El nombre del tipo de usuario y la cantidad de usuarios distintos de dicho tipo que registran, como
+-- dueños, archivos con extensión pdf.
+SELECT DISTINCT TU.TipoUsuario, COUNT(DISTINCT U.IDUsuario)
 FROM Archivos AS A
+INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
+INNER JOIN TiposUsuario AS TU ON U.IDTipoUsuario = TU.IDTipoUsuario
+WHERE A.Extension = 'pdf' AND A.IDUsuarioDueño = U.IDUsuario
+GROUP BY TU.TipoUsuario; -- Agrupamos los resultados por tipo de usuario
 
+-- Ejercicio 10 - El nombre y apellido de los usuarios dueños y la suma total del tamaño de los archivos que tengan
+-- compartidos con otros usuarios. Mostrar ordenado de mayor sumatoria de tamaño a menor.
 
--- Ejercicio 10 - El nombre y apellido de los usuarios dueños y la suma total del tamaño de los archivos que tengan compartidos con otros usuarios. Mostrar  ordenado de mayor sumatoria de tamaño a menor.
-	
+-- Analisis
+-- Necesito obtener el Nombre y Apellido (Tabla Usuarios) de los dueños de los Archivos (Tabla Archivos)
+-- sumatoria total del tamaño de los archivos: (SUM de los Tamaños de los archivos que se encuentren compartidos (Tabla ArchivosCompartidos))
+SELECT U.Nombre, U.Apellido, ROUND(SUM(A.Tamaño) / 1024.0 / 1024.0, 4) AS 'Sumatoria de MB'
+FROM Archivos AS A
+INNER JOIN Usuarios AS U ON A.IDUsuarioDueño = U.IDUsuario
+INNER JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
+GROUP BY U.Nombre, U.Apellido
 
--- Ejercicio 11 - El nombre del tipo de archivo y el promedio de tamaño de los archivos que corresponden a dicho tipo de archivo.
+-- Ejercicio 11 - El nombre del tipo de archivo y el promedio de tamaño de los archivos que corresponden a dicho
+-- tipo de archivo.
 
 
 -- Ejercicio 12 - Por cada extensión, indicar la extensión, la cantidad de archivos con esa extensión y el total acumulado en bytes. Ordenado por cantidad de archivos de forma ascendente.
