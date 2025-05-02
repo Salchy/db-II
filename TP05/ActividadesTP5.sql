@@ -126,7 +126,16 @@ GROUP BY TA.TipoArchivo;
 
 -- Ejercicio 17 - El nombre del tipo de archivo y el promedio de tamaño de los archivos que corresponden a dicho
 -- tipo de archivo. Solamente listar aquellos registros que superen los 50 Megabytes de promedio.
-
+SELECT TA.TipoArchivo, ROUND(AVG(A.Tamaño * 1.0) / 1024.0 / 1024.0, 4) AS 'Promedio MB'
+FROM Archivos AS A
+INNER JOIN TiposArchivos AS TA ON A.IDTipoArchivo = TA.IDTipoArchivo
+GROUP BY TA.TipoArchivo
+HAVING AVG(A.Tamaño * 1.0) / 1024.0 / 1024.0 > 50
 
 -- Ejercicio 18 - Listar las extensiones que registren más de 2 archivos que no hayan sido compartidos.
-
+SELECT A.Extension, COUNT(A.IDArchivo)
+FROM Archivos AS A
+LEFT JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
+WHERE AC.IDArchivo IS NULL
+GROUP BY A.Extension
+HAVING COUNT(A.IDArchivo) > 2;
