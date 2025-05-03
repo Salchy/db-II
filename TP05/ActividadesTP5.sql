@@ -133,7 +133,7 @@ GROUP BY TA.TipoArchivo
 HAVING AVG(A.Tamaño * 1.0) / 1024.0 / 1024.0 > 50
 
 -- Ejercicio 18 - Listar las extensiones que registren más de 2 archivos que no hayan sido compartidos.
-SELECT A.Extension, COUNT(A.IDArchivo)
+SELECT A.Extension, COUNT(A.IDArchivo) AS 'CantExtensiones'
 FROM Archivos AS A
 LEFT JOIN ArchivosCompartidos AS AC ON A.IDArchivo = AC.IDArchivo
 WHERE AC.IDArchivo IS NULL
