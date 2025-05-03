@@ -1,18 +1,33 @@
 -- Ejercicios TP 6
 
--- Ejercicio 1 Los nombres y extensiones y tamaño en Megabytes de los archivos que pesen más
+-- Ejercicio 1: Los nombres y extensiones y tamaño en Megabytes de los archivos que pesen más
 -- que el promedio de archivos.
 SELECT A.Nombre, A.Extension, A.Tamaño / 1024.0 / 1024.0 AS 'MB'
 FROM Archivos AS A
 WHERE A.Tamaño > (SELECT AVG(A2.Tamaño * 1.0) FROM Archivos AS A2);
 
--- Ejercicio 2 Los usuarios indicando apellido y nombre que no sean dueños de ningún archivo con extensión 'zip'.
+-- Ejercicio 2: Los usuarios indicando apellido y nombre que no sean dueños de ningún
+-- archivo con extensión 'zip'.
+SELECT DISTINCT U.Apellido + ', ' + U.Nombre AS 'Usuarios Sin Archivos zip'
+FROM Usuarios AS U
+INNER JOIN Archivos AS A ON U.IDUsuario = A.IDUsuarioDueño
+WHERE U.IDUsuario NOT IN (SELECT A2.IDUsuarioDueño
+	FROM Archivos AS A2
+	WHERE A2.Extension = 'zip'
+);
 
+-- Ejercicio 3: Los usuarios indicando IDUsuario, apellido, nombre y tipo de usuario que
+-- no hayan creado ni modificado ningún archivo en el año actual.
+SELECT U.IDUsuario, U.Apellido + ', ' + U.Nombre AS 'Usuario', TU.TipoUsuario
+FROM Usuarios AS U
+INNER JOIN TiposUsuario AS TU ON U.IDTipoUsuario = TU.IDTipoUsuario
+WHERE U.IDUsuario NOT IN (SELECT U2.IDUsuario
+	FROM Usuarios AS U2
+	INNER JOIN Archivos AS A2 ON U2.IDUsuario = A2.IDUsuarioDueño
+	WHERE YEAR(A2.FechaUltimaModificacion) = YEAR(GETDATE()) OR YEAR(A2.FechaCreacion) = YEAR(GETDATE())
+)
 
--- Ejercicio 3 Los usuarios indicando IDUsuario, apellido, nombre y tipo de usuario que no hayan creado ni modificado ningún archivo en el año actual.
-
-
--- Ejercicio 4 Los tipos de usuario que no registren usuario con archivos eliminados.
+-- Ejercicio 4: Los tipos de usuario que no registren usuario con archivos eliminados.
 
 
 -- Ejercicio 5 Los tipos de archivos que no se hayan compartido con el permiso de 'Lectura'
