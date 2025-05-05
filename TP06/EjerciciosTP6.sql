@@ -25,21 +25,41 @@ WHERE U.IDUsuario NOT IN (SELECT U2.IDUsuario
 	FROM Usuarios AS U2
 	INNER JOIN Archivos AS A2 ON U2.IDUsuario = A2.IDUsuarioDueño
 	WHERE YEAR(A2.FechaUltimaModificacion) = YEAR(GETDATE()) OR YEAR(A2.FechaCreacion) = YEAR(GETDATE())
-)
+);
 
 -- Ejercicio 4: Los tipos de usuario que no registren usuario con archivos eliminados.
+SELECT DISTINCT TU.TipoUsuario
+FROM Usuarios AS U
+INNER JOIN Archivos AS A ON U.IDUsuario = A.IDUsuarioDueño
+INNER JOIN TiposUsuario AS TU ON U.IDTipoUsuario = TU.IDTipoUsuario
+WHERE TU.TipoUsuario NOT IN(
+	SELECT DISTINCT TU2.TipoUsuario
+	FROM Usuarios AS U2
+	INNER JOIN Archivos AS A2 ON U2.IDUsuario = A2.IDUsuarioDueño
+	INNER JOIN TiposUsuario AS TU2 ON U2.IDTipoUsuario = TU2.IDTipoUsuario
+	WHERE A2.Eliminado = 1
+);
+
+-- Ejercicio 5: Los tipos de archivos que no se hayan compartido con el permiso de 'Lectura'
+SELECT DISTINCT TA.TipoArchivo
+FROM TiposArchivos AS TA
+WHERE TA.TipoArchivo NOT IN(
+	SELECT DISTINCT TA.TipoArchivo
+	FROM ArchivosCompartidos AS AC
+	INNER JOIN Archivos AS A ON AC.IDArchivo = A.IDArchivo
+	INNER JOIN TiposArchivos AS TA ON A.IDTipoArchivo = TA.IDTipoArchivo
+	INNER JOIN Permisos AS P ON AC.IDPermiso = P.IDPermiso
+	WHERE P.Nombre = 'Lectura'
+);
+
+-- Ejercicio 6: Los nombres y extensiones de los archivos que tengan un tamaño mayor al del archivo con extensión 
+-- 'xls' más grande.
 
 
--- Ejercicio 5 Los tipos de archivos que no se hayan compartido con el permiso de 'Lectura'
+-- Ejercicio 7: Los nombres y extensiones de los archivos que tengan un tamaño mayor al del archivo con extensión 'zip' más pequeño.
 
 
--- Ejercicio 6 Los nombres y extensiones de los archivos que tengan un tamaño mayor al del archivo con extensión 'xls' más grande.
-
-
--- Ejercicio 7 Los nombres y extensiones de los archivos que tengan un tamaño mayor al del archivo con extensión 'zip' más pequeño.
-
-
--- Ejercicio 8 Por cada tipo de archivo indicar el tipo y la cantidad de archivos eliminados y la cantidad de archivos no eliminados.
+-- Ejercicio 8: Por cada tipo de archivo indicar el tipo y la cantidad de archivos eliminados y la cantidad de archivos no eliminados.
 
 
 -- Ejercicio 9 Por cada usuario indicar el IDUsuario, el apellido, el nombre, la cantidad de archivos pequeños (menos de 20MB) y la cantidad de archivos grandes (20MBs o más)
