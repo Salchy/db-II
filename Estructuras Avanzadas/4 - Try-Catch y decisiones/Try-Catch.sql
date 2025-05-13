@@ -3,7 +3,6 @@ BEGIN TRY
 	-- Instrucciones a ejecutar.
 	-- Si alguna instrucción de acá genera un error, salta al CATCH
 END TRY
-
 BEGIN CATCH
 	-- Instrucciones a ejecutar en caso de un eventual error en el TRY
 END CATCH
