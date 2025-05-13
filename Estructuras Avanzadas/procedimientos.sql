@@ -27,3 +27,37 @@ END
 
 -- Para borrar un procedimiento:
 DROP PROCEDURE sp_NombreProcedimiento;
+
+------------ EJERCITACION ------------
+
+-- Creo el procedimiento
+CREATE PROCEDURE SP_OBTENER_EMPLEADOS
+AS
+BEGIN
+	SELECT * FROM Empleados
+END
+
+-- Lo ejecuto:
+EXEC SP_OBTENER_EMPLEADOS;
+
+---- EJEMPLO USANDO UPDATE ----
+
+-- Por ejemplo, puedo crear un procedimiento, para actualizar un stock:
+
+-- Es un ejemplo del contenido de la materia, va a fallar en esta db
+-- Creo el procedimiento
+CREATE PROCEDURE SP_AGREGAR_STOCK(
+	@IDARTICULO BIGINT,
+	@CANTIDAD INT
+)
+AS
+BEGIN
+	UPDATE ARTICULOS SET STOCK = STOCK + @CANTIDAD
+	WHERE IDARTICULO = @IDARTICULO
+END
+
+-- ORDEN DE LOS ARGUMENTOS: IDARTICULO, CANTIDAD
+EXEC SP_AGREGAR_STOCK 1, 6
+
+-- (Se puede editar un procedimiento, desde la instruccion ALTER PROCEDURE)
+-- Incluir condiciones para mejorar la lógica (NO permitir ingreso de números negativos)
