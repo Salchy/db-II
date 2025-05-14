@@ -55,7 +55,7 @@ BEGIN
 
        -- Registramos el movimiento en la tabla de Movimientos
         INSERT INTO movimientos (fecha, nrocuenta, descripcion, tipomovimiento, importe)
-		VALUES (GETDATE(), @nroCuenta, @descripcion, @tipoMovimiento, @importe)
+		VALUES (GETDATE(), @nroCuenta, @descripcion, @tipoMovimiento, @importe);
 
         -- Si es Extracción el importe debe restarse
         IF @tipoMovimiento = 'E' OR @tipoMovimiento = 'e'
@@ -81,4 +81,51 @@ BEGIN
         ROLLBACK TRANSACTION -- Revierte todos los cambios de datos, que fueron modificados dentro de la TRANSACTION
     END CATCH
     -- Finaliza el manejo de errores
-END
+END;
+
+-------------------------------------------------------------------------------
+-- Para procedimientos que requieran obtener el ID autogenerado por IDENTITY --
+-------------------------------------------------------------------------------
+
+-- Código que está en el material de estudio, no aplica a esta DB:
+CREATE PROCEDURE spAgregarCliente (
+    @nombre     VARCHAR(50),
+    @apellido   VARCHAR(50),
+    @sexo       CHAR,
+    @idsucursal INT
+)
+AS
+BEGIN
+    BEGIN TRANSACTION
+
+    BEGIN TRY
+        -- Generamos el cliente
+        INSERT INTO Clientes (nombre, apellido, sexo, idsucursal, estado)
+        VALUES (@nombre, @apellido, @sexo, @idsucursal, 1);
+
+        -- Obtenemos el ID del cliente recién insertado
+        DECLARE @idCliente BIGINT;
+        SET @idCliente = @@IDENTITY;
+
+        -- Generamos el número de cuenta
+        DECLARE @nroCuenta BIGINT;
+        SELECT @nroCuenta = MAX(nrocuenta) FROM Cuentas;
+
+        -- Insertamos la cuenta del cliente
+        INSERT INTO Cuentas (nrocuenta, idcliente, idtipocuenta, saldo, limite_descubierto, fecha_alta, fecha_baja, estado)
+        VALUES (@nroCuenta + 1, @idCliente, 1, 0, 0, GETDATE(), NULL, 1);
+
+        -- Generamos la tarjeta de débito
+        INSERT INTO Tarjetas (nrotarjeta, idcliente, tipotarjeta, estado)
+        VALUES ('D-' + CONVERT(NVARCHAR(10), @idCliente) + '-1', @idCliente, 'D', 1);
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        PRINT 'QUÉ RARO, EN MI CASA FUNCIONA';
+        ROLLBACK TRANSACTION;
+    END CATCH
+END;
+
+-- También se pueden ejecutar transacciones anidadas:
+-- Usando la funcion global @@TRANCOUNT > 0 hacer rollback transaction en el bloque catch
