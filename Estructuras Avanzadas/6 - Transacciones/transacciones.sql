@@ -129,3 +129,46 @@ END;
 
 -- También se pueden ejecutar transacciones anidadas:
 -- Usando la funcion global @@TRANCOUNT > 0 hacer rollback transaction en el bloque catch
+-- Ejecutar el Procedimiento / Transacion 
+CREATE PROCEDURE spAgregarCliente (
+    @nombre     VARCHAR(50),
+    @apellido   VARCHAR(50),
+    @sexo       CHAR,
+    @idsucursal INT
+)
+AS
+BEGIN
+    BEGIN TRANSACTION
+
+    BEGIN TRY
+        -- Generamos el cliente
+        INSERT INTO Clientes (nombre, apellido, sexo, idsucursal, estado)
+        VALUES (@nombre, @apellido, @sexo, @idsucursal, 1);
+
+        -- Obtenemos el ID del cliente recién insertado
+        DECLARE @idCliente BIGINT;
+        SET @idCliente = @@IDENTITY;
+
+        -- Generamos el número de cuenta
+        DECLARE @nroCuenta BIGINT;
+        SELECT @nroCuenta = MAX(nrocuenta) FROM Cuentas;
+
+        -- Insertamos la cuenta del cliente
+        INSERT INTO Cuentas (nrocuenta, idcliente, idtipocuenta, saldo, limite_descubierto, fecha_alta, fecha_baja, estado)
+        VALUES (@nroCuenta + 1, @idCliente, 1, 0, 0, GETDATE(), NULL, 1);
+
+        -- Generamos la tarjeta de débito
+        INSERT INTO Tarjetas (nrotarjeta, idcliente, tipotarjeta, estado)
+        VALUES ('D-' + CONVERT(NVARCHAR(10), @idCliente) + '-1', @idCliente, 'D', 1);
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+		IF @@TRANCOUNT > 0 BEGIN
+			ROLLBACK TRANSACTION; -- Ejecutar el ROLLBACK solo una vez, si se ejecutó en la transaccion anidada, ya hizo rollback, y ROWCOUNT es 0
+		END
+        PRINT 'QUÉ RARO, EN MI CASA FUNCIONA';
+    END CATCH
+END;
+
+-- Por cada BEGIN TRANSACTION, se suma + 1 al @@TRANSCOUNT, y por cada COMMIT hace -1, pero al
